@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CommuteAlert.Web/CommuteAlert.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CommuteAlert.Tests/CommuteAlert.Tests.csproj" />
+  </Folder>
+</Solution>
