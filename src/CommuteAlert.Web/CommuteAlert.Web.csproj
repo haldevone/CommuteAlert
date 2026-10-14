@@ -27,7 +27,6 @@
     <Folder Include="Security\" />
     <Folder Include="Notifications\" />
     <Folder Include="Rules\" />
-    <Folder Include="Sl\" />
   </ItemGroup>
 
 </Project>

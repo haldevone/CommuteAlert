@@ -22,4 +22,12 @@
     <ProjectReference Include="..\..\src\CommuteAlert.Web\CommuteAlert.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestData\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

@@ -13,6 +13,8 @@ Bollade Ideer kring vilket projekt som jag skulle starta med tidsplanen som foku
 ## dag 2, vecka 1
 Jobbade vidare med dokumentationen av ovannämnda. Gjorde färdigt ett grundprojekt som består av CommunAlert.Web och CommunAlert.Tests med boilerplate Identity.
 
+## dag 3 vecka 1
+Laddade upp allt på github ny repo. Testade testData json fil från SL Departures & Deviations. Skapade data modeller efter datan. Nya 2 nya test filer som testar läsa datan från deviations & departures.json.
 
 
 ## Vecka 2 – Kärnan
