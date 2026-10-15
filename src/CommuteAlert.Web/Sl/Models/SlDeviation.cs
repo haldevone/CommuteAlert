@@ -1,4 +1,4 @@
-﻿namespace CommuteAlert.Web.Sl;
+﻿namespace CommuteAlert.Web.Sl.Models;
 
 public record SlDeviation
 (

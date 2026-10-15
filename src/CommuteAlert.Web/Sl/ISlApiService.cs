@@ -1,4 +1,5 @@
-﻿namespace CommuteAlert.Web.Sl;
+﻿using CommuteAlert.Web.Sl.Models;
+namespace CommuteAlert.Web.Sl;
 
 public interface ISlApiService
 {

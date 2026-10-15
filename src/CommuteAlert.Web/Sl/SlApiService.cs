@@ -1,4 +1,5 @@
 ﻿using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
+using CommuteAlert.Web.Sl.Models;
 
 namespace CommuteAlert.Web.Sl;
 

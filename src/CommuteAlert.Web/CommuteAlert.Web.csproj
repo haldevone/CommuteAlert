@@ -26,7 +26,6 @@
     <Folder Include="Services\" />
     <Folder Include="Security\" />
     <Folder Include="Notifications\" />
-    <Folder Include="Rules\" />
   </ItemGroup>
 
 </Project>
