@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CommuteAlert.Web.Data;
 using CommuteAlert.Web.Sl;
+using CommuteAlert.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +18,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<ISlApiService, SlApiService>(client =>
     client.Timeout = TimeSpan.FromSeconds(10));
 
-var app = builder.Build();
+builder.Services.AddScoped<AlertService>();
 
+
+
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {

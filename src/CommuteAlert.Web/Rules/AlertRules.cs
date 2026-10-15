@@ -49,7 +49,7 @@ public static class AlertRules
         (w.LineId == null || w.LineId == d.Line.Id) &&
         (w.DirectionCode == null || w.DirectionCode == d.DirectionCode);
 
-    private static bool InWindow(Watch w, DateTime time)
+    public static bool InWindow(Watch w, DateTime time)
     {
         var day = (WatchDays)(1 << (int)time.DayOfWeek);
         

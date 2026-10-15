@@ -83,9 +83,16 @@ public class AlertRulesTests
 
     [Fact] // T-07
     public void Disruption_on_other_line_gives_no_alert()
-        => Assert.Empty(AlertRules.Evaluate(NewWatch(), new(), new List<SlDeviation> { Deviation(14) }, Now));
+    {
+        Assert.Empty(
+            AlertRules.Evaluate(
+                NewWatch(), 
+                new(), 
+                new List<SlDeviation> { Deviation(14) }, 
+                Now));
+    }
 
-    [Fact] // T-08
+    [Fact] // T-08 (the key part; saving only once is tested later in the service)
     public void Same_departure_gives_same_key_each_time()
     {
         var first = Run(Departure(state: "CANCELLED"));
