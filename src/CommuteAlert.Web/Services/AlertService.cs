@@ -23,7 +23,9 @@ public class AlertService
     {
         var created = new List<Alert>();
 
-        // InWindow cannot be translated to SQL, so the filter runs in memory
+        // Hämtar alla aktiva watches som är i "window" just nu. Vi vill inte hämta alla watches,
+        // eftersom det kan vara väldigt många
+        // Vi hämtar bara de departures som är relevanta för de aktiva watches som är i "window" just nu.
         var watches = (await _db.Watches.Where(w => w.IsActive).ToListAsync(ct))
             .Where(w => AlertRules.InWindow(w, nowLocal))
             .ToList();
@@ -34,10 +36,11 @@ public class AlertService
 
         var departuresBySite = new Dictionary<int, List<SlDeparture>>();
 
+        // Hämta departures för varje unik siteId som finns i watches
         foreach (var siteId in watches.Select(w => w.SiteId).Distinct())
             departuresBySite[siteId] = await _sl.GetDeparturesAsync(siteId, ct);
 
-
+        // Utvärdera varje watch mot departures och deviations, och skapa alerts om det behövs, undvik dubbletter
         foreach (var watch in watches)
         {
             var suggestions = AlertRules.Evaluate(
@@ -50,7 +53,7 @@ public class AlertService
 
             foreach (var s in suggestions)
             {
-                if (!sentKeys.Add(s.Key)) continue; // already saved, or repeated in this round
+                if (!sentKeys.Add(s.Key)) continue;
 
                 var alert = new Alert
                 {

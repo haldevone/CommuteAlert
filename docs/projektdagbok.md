@@ -2,7 +2,7 @@
 
 
 
-## Vecka 1 – Grund och undersökning
+## Vecka 1 – 
 
 **Veckans mål** projektplan klar, repo och struktur, riktiga svar från SL sparade, SL-klient med modeller, första datamodellen.
 
@@ -17,21 +17,25 @@
     Laddade upp allt på github ny repo. Testade testData json fil från SL Departures & Deviations. Skapade data modeller för Sl efter json datan som jag fick från Departures/Deviations. 2 nya test filer som testar läsa datan från deviations & departures.json.
 
 - ## dag 4 vecka 1
-    Utvärderade och skapade datamodeller för applikationen, ALert, AlertType, Watch och WatchDays. Byggde Regler som är en service form utan interaktion med extern API som filtrerar relevanta avgångar, skippar inställda, håller sig till angivna gränsvärden hittar berörda aktiva trafikstörningar och retunerar i resultat, AlertRules & AlertSuggestions. Skapade enhetstester i AlertRulesTest
+    Utvärderade och skapade datamodeller för applikationen, ALert, AlertType, Watch och WatchDays. Byggde Regler som är en service form utan interaktion med extern API som filtrerar relevanta avgångar, skippar inställda, håller sig till angivna gränsvärden hittar berörda aktiva trafikstörningar och retunerar i resultat, AlertRules & AlertSuggestions. 
 
-## Vecka 2 – Kärnan
+- ## dag 5 vecka 1
+    Byggde AlertService som hämtar data från SL jämför med skapade bevakningar och retunerar berörda varningar. Skapade enhetstester i AlertRulesTest.
+    
+
+## Vecka 2 – 
 
 **Veckans mål:** inloggning, bevakningar, regelmotor, dubblettskydd, Discord-notis, schemaläggning, enhetstester. Milstolpe: fungerande flöde från SL till Discord.
 
 
 
-## Vecka 3 – Kvalitet och säkerhet
+## Vecka 3 – 
 
 **Veckans mål:** felhantering, krypterad webhook, loggning, simuleringsläge, systematiska tester.
 
 
 
-## Vecka 4 – Avslut
+## Vecka 4 – 
 
 **Veckans mål:** README, Docker, GitHub Actions, testrapport, projektrapport, förberedelse inför redovisning.
 
