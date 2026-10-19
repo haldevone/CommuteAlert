@@ -21,6 +21,9 @@
 
 - ## dag 5 vecka 1
     Byggde AlertService som hämtar data från SL jämför med skapade bevakningar och retunerar berörda varningar. Skapade enhetstester i AlertRulesTest.
+
+- ## dag 6 vecka 1
+    Skapade WebhookValidator för att skydda manipulering mot URLen, och webhookProtecor för att kryptera den. Discordnotifier används för att skicka meddelande innehålet som JSON till discord (webhookUrlen). AlertSender med funktionen att hämta oskickade alerts från db och skicka om de till discord.
     
 
 ## Vecka 2 – 

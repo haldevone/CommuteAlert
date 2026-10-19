@@ -23,8 +23,6 @@
   <ItemGroup>
     <Folder Include="ViewModels\" />
     <Folder Include="Configuration\" />
-    <Folder Include="Security\" />
-    <Folder Include="Notifications\" />
   </ItemGroup>
 
 </Project>

@@ -43,7 +43,7 @@ namespace CommuteAlert.Web.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("SentAt")
+                    b.Property<DateTime?>("SentAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Type")

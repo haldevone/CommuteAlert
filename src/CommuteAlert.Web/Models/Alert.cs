@@ -8,5 +8,5 @@ public class Alert
     public string Key { get; set; } = ""; // spec nyckel som identifierar händelsen
     public string Message { get; set; } = "";
     public DateTime CreatedAt { get; set; }
-    public DateTime SentAt { get; set; }
+    public DateTime? SentAt { get; set; }
 }
