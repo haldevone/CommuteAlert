@@ -19,13 +19,13 @@ public class AlertService
         _sl = sl;
     }
 
+    //Hämtar SL-data och skapar nya alerts.
     public async  Task<List<Alert>> CheckAndGetAlerts(DateTime nowLocal, CancellationToken ct = default)
     {
         var created = new List<Alert>();
 
-        // Hämtar alla aktiva watches som är i "window" just nu. Vi vill inte hämta alla watches,
+        // Hämtar alla aktiva watches (bevakningar) som är i "window" just nu. Vi vill inte hämta alla watches,
         // eftersom det kan vara väldigt många
-        // Vi hämtar bara de departures som är relevanta för de aktiva watches som är i "window" just nu.
         var watches = (await _db.Watches.Where(w => w.IsActive).ToListAsync(ct))
             .Where(w => AlertRules.InWindow(w, nowLocal))
             .ToList();

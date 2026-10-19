@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using CommuteAlert.Web.Data;
 using CommuteAlert.Web.Sl;
 using CommuteAlert.Web.Services;
+using CommuteAlert.Web.Security;
+using CommuteAlert.Web.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,17 @@ builder.Services.AddHttpClient<ISlApiService, SlApiService>(client =>
     client.Timeout = TimeSpan.FromSeconds(10));
 
 builder.Services.AddScoped<AlertService>();
+
+builder.Services.AddSingleton<WebhookProtector>();
+
+builder.Services.AddScoped<AlertSender>();
+
+builder.Services.AddHttpClient<INotifier, DiscordNotifier>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
+
+builder.Services.AddHostedService<AlertScheduler>();
 
 
 

@@ -30,6 +30,9 @@
 
 **Veckans mål:** inloggning, bevakningar, regelmotor, dubblettskydd, Discord-notis, schemaläggning, enhetstester. Milstolpe: fungerande flöde från SL till Discord.
 
+- ## dag 1 vecka 2
+    Skapade AlertScheduler som automatiskt kör kontrollen (poolar varje minut) av SL och skickar alerts med jämna mellanrum.
+
 
 
 ## Vecka 3 – 
