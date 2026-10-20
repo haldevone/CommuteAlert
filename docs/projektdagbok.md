@@ -33,6 +33,8 @@
 - ## dag 1 vecka 2
     Skapade AlertScheduler som automatiskt kör kontrollen (poolar varje minut) av SL och skickar alerts med jämna mellanrum.
 
+- ## dag 2 vecka 2
+    Skapade tester som kontrollerar discord webhook adressen.
 
 
 ## Vecka 3 – 
