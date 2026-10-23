@@ -34,6 +34,9 @@ builder.Services.AddHttpClient<INotifier, DiscordNotifier>(client =>
 
 builder.Services.AddHostedService<AlertScheduler>();
 
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient<SlSiteService>(client =>
+    client.Timeout = TimeSpan.FromSeconds(30));
 
 
 var app = builder.Build();

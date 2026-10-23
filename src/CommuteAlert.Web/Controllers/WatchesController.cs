@@ -33,9 +33,9 @@ public class WatchesController : Controller
         return User.FindFirstValue(ClaimTypes.NameIdentifier)!;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var watches = _db.Watches
+        var watches = await _db.Watches
             .Where(w => w.UserId == GetUserId())
             .OrderBy(w => w.SiteName)
             .ToListAsync();
@@ -186,7 +186,7 @@ public class WatchesController : Controller
         return options;
     }
 
-    //Validerar valet och omvandlar det till separata värden som används till skapande av bevakning.
+    //Godkänner bara kända format. Omvandlar det till separata värden som används till skapande av bevakning. 
     private static bool TryParseTarget(string? target, out string? mode, out int? lineId,
     out int? directionCode, out string label)
     {

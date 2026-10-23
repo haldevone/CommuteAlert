@@ -1,0 +1,60 @@
+﻿@using CommuteAlert.Web.Models
+@using CommuteAlert.Web.ViewModels
+@model WatchCreateViewModel
+@{
+    ViewData["Title"] = "New watch";
+    var days = new[]
+    {
+        WatchDays.Monday, WatchDays.Tuesday, WatchDays.Wednesday, WatchDays.Thursday,
+        WatchDays.Friday, WatchDays.Saturday, WatchDays.Sunday
+    };
+}
+
+<h1>New watch: @Model.SiteName</h1>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="SiteId" />
+
+    <div class="mb-3">
+        <label asp-for="Target" class="form-label">What to watch</label>
+        <select asp-for="Target" asp-items="Model.TargetOptions" class="form-select"></select>
+        <span asp-validation-for="Target" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Days</label><br />
+        @foreach (var day in days)
+        {
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="SelectedDays"
+                       value="@day" id="day-@day" @(Model.SelectedDays.Contains(day) ? "checked" : "") />
+                <label class="form-check-label" for="day-@day">@day</label>
+            </div>
+        }
+        <span asp-validation-for="SelectedDays" class="text-danger"></span>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label for="StartTime" class="form-label">From</label>
+            <input id="StartTime" name="StartTime" type="time" class="form-control"
+                   value="@Model.StartTime.ToString("HH:mm")" />
+        </div>
+        <div class="col">
+            <label for="EndTime" class="form-label">To</label>
+            <input id="EndTime" name="EndTime" type="time" class="form-control"
+                   value="@Model.EndTime.ToString("HH:mm")" />
+            <span asp-validation-for="EndTime" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DelayThresholdMinutes" class="form-label">Alert when delayed at least (minutes)</label>
+        <input asp-for="DelayThresholdMinutes" class="form-control" />
+        <span asp-validation-for="DelayThresholdMinutes" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-link">Cancel</a>
+</form>
