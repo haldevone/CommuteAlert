@@ -39,6 +39,9 @@
 - ## dag 3 vecka 2
     Slutförde alla tester, SLAPIService, AlertService, Rules, SlModels.
 
+- ## dag 4 vecka 2
+    Skapade SlsiteService som hämtar och cachar data från SL om hållplatser, samt sök funktioner. WatchesCOntroller, sökfunktion filtrering av bevakningar/hållplatser valbara alternativ, getCreate och Post Create bevakning samt Delete.
+
 
 ## Vecka 3 – 
 

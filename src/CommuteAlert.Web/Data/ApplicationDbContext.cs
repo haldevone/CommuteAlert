@@ -25,6 +25,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<Watch>(e =>
         {
             e.Property(w => w.UserId).HasMaxLength(450);
+            e.Property(w => w.SiteName).HasMaxLength(100);
+            e.Property(w => w.TargetName).HasMaxLength(120);
             e.HasOne<IdentityUser>().WithMany().HasForeignKey(w => w.UserId)
             .IsRequired().OnDelete(DeleteBehavior.Cascade);
         });

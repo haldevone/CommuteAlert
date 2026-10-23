@@ -1,25 +1,29 @@
 # Beslutslogg – CommuteAlert
 
-Här skrivs varje viktigt tekniskt eller praktiskt val ner, med alternativen och varför jag valde som jag gjorde. Loggen används vid den muntliga redovisningen för att förklara och försvara valen.
+Här skrivs varje viktigt tekniskt eller praktiskt val ner, med alternativen och varför jag valde som jag gjorde. 
 
-
+## Så ska det funka
+1. Sök station: Du skriver ett namn (till exempel Södertälje) och får en lista med träffar från SL:s hållplatslista. Hållplatslista hämtas en gång och sparas i minnet i 24 timmar,för att inte belasta SL.
+2. Skapa bevakning: När du valt station hämtar sidan de avgångar som går just nu och bygger menyn utifrån dem: allt på stationen, ett helt trafikslag, eller en viss linje i en viss riktning (“METRO 13 to Norsborg”). Då slipper vi ladda SL:s hela linjelista.
+3. Dagar, tider och försening väljer du med kryssrutor och tidsfält.
+4. Lista och ta bort: Du ser bara dina egna bevakningar, och borttagningen kontrollerar att bevakningen är din.
 
 ## Ett MVC-projekt istället för separat frontend och backend
-**Bakgrund:** Appen behöver ett gränssnitt för inloggning, bevakningar och historik, samt ett backend del.
-**Alternativ:** 1) ASP.NET Core MVC i en lösning. 2) Separat frontend (till exempel React) mot ett API.
-**Beslut:** MVC i en lösning, tiden är fyra veckor och testing samt säkerhet är fokus, orkar inte hålla på med CORS och två projekt
+Appen behöver ett gränssnitt för inloggning, bevakningar och historik, samt ett backend del.
+1) ASP.NET Core MVC i en lösning. 2) Separat frontend (till exempel React) mot ett API.
+MVC i en lösning, tiden är fyra veckor och testing samt säkerhet är fokus, orkar inte hålla på med CORS och två projekt
 
 
 ## Lagerindelning (Core, Infrastructure, Web, Tests)
-**Bakgrund:** Reglerna för när ett larm ska skickas är kärnan och måste vara lätta att testa.
-**Alternativ:** 1) Allt i ett projekt. 2) Uppdelning i lager.
-**Beslut:** Allt i ett projekt, vill hålla nere komplexiteten men ändå behålla en bra struktur med tydliga mappar
+Reglerna för när ett larm ska skickas är kärnan och måste vara lätta att testa.
+1) Allt i ett projekt. 2) Uppdelning i lager.
+Allt i ett projekt, vill hålla nere komplexiteten men ändå behålla en bra struktur med tydliga mappar
 
 
-## SQL Server istället för SQLite
-**Bakgrund:** Appen lagrar användare, bevakningar, larmhistorik och krypterade webhook-adresser
-**Alternativ:** 1) SQLite. 2) SQL Server
-**Beslut:** SQL Server via EF Core, vill behålla lagrad data samt planerar för container i Azure
+## SQL Server istället för SQLite, docker?
+Appen lagrar användare, bevakningar, larmhistorik och krypterade webhook-adresser
+1) SQLite. 2) SQL Server 3) Båda
+Båda. SQL Server via EF Core, vill behålla lagrad data samt planerar för container i Azure därför kör jag i Docker. Sqlite kör jag endast tester.
 
 
 ## Discord-webhook som notiskanal, bakom ett gränssnitt
@@ -45,7 +49,7 @@ Här skrivs varje viktigt tekniskt eller praktiskt val ner, med alternativen och
 **Alternativ:** 1) Bara `dotnet run`. 2) Docker och `docker compose`.
 **Beslut:** README visar båda. Databasen körs i container, och programmet kan köras både direkt och i container. Ett enda MVC-projekt startar med ett kommando, men databasen behöver en container, och samma container-paket kan användas i Azure.
 
-## LarmFlödet
+## Larm Flödet
 **Bakgrund:** Förklaring av larmfödet
 **Beslut:** Användaren sparar en bevakning av valda parametrar, det sparas i db. Varje minut poolas från SL störningar och avgångsinformation. Det jämförs med sparade bevakningen och utverderas om den matchar så skickas det notis vidare till discord. Systemet förhindrar duplikat av larm.
 

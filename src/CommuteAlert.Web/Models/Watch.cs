@@ -13,4 +13,6 @@ public class Watch
     public TimeOnly EndTime { get; set; }
     public int DelayThresholdMinutes { get; set; } = 5;
     public bool IsActive { get; set; } = true;
+    public string SiteName { get; set; } = "";
+    public string TargetName { get; set; } = "";
 }
