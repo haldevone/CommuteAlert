@@ -45,4 +45,7 @@ Här skrivs varje viktigt tekniskt eller praktiskt val ner, med alternativen och
 **Alternativ:** 1) Bara `dotnet run`. 2) Docker och `docker compose`.
 **Beslut:** README visar båda. Databasen körs i container, och programmet kan köras både direkt och i container. Ett enda MVC-projekt startar med ett kommando, men databasen behöver en container, och samma container-paket kan användas i Azure.
 
+## LarmFlödet
+**Bakgrund:** Förklaring av larmfödet
+**Beslut:** Användaren sparar en bevakning av valda parametrar, det sparas i db. Varje minut poolas från SL störningar och avgångsinformation. Det jämförs med sparade bevakningen och utverderas om den matchar så skickas det notis vidare till discord. Systemet förhindrar duplikat av larm.
 

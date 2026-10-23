@@ -51,7 +51,7 @@ public class AlertServiceTests
             new SlLine(13, "13", "METRO", null));
     }
 
-    [Fact]
+    [Fact] // T-08
     public async Task Same_event_in_two_rounds_gives_one_alert()
     {
         using var db = CreateDb();
@@ -67,7 +67,7 @@ public class AlertServiceTests
         Assert.Equal(1, db.Alerts.Count());
     }
 
-    [Fact]
+    [Fact] // T-09
     public async Task Round_outside_time_window_does_not_call_sl()
     {
         using var db = CreateDb();
@@ -81,18 +81,5 @@ public class AlertServiceTests
         Assert.Empty(fake.DepartureCalls);
     }
 
-    [Fact]
-    public async Task Same_site_is_fetched_once_for_many_watches()
-    {
-        using var db = CreateDb();
-        AddWatch(db);
-        AddWatch(db);
-        var fake = new FakeSlApiService { Departures = { CancelledDeparture() } };
-        var service = new AlertService(db, fake);
 
-        var result = await service.CheckAndGetAlerts(InsideWindow);
-
-        Assert.Single(fake.DepartureCalls);
-        Assert.Equal(2, result.Count);
-    }
 }

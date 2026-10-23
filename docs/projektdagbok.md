@@ -36,6 +36,9 @@
 - ## dag 2 vecka 2
     Skapade tester som kontrollerar discord webhook adressen.
 
+- ## dag 3 vecka 2
+    Slutförde alla tester, SLAPIService, AlertService, Rules, SlModels.
+
 
 ## Vecka 3 – 
 

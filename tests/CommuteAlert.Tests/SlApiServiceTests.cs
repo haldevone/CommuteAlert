@@ -5,7 +5,7 @@ namespace CommuteAlert.Tests;
 
 public class SlApiServiceTests
 {
-    [Fact]
+    [Fact] //T-14
     public async Task GetDeparturesAsync_calls_correct_url_and_reads_response()
     {
         var json = File.ReadAllText("TestData/departures.json");

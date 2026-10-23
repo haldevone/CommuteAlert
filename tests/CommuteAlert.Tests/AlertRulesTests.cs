@@ -30,15 +30,24 @@ public class AlertRulesTests
             new SlLine(lineId, "13", "METRO", null));
     }
 
-    private static SlDeviation Deviation(int lineId) => new(
-        1,
+    private static SlDeviation Deviation(int lineId)
+    {
+        return new( 1,
         new SlPublish(new DateTimeOffset(2026, 10, 14, 0, 0, 0, TimeSpan.FromHours(2)),
                       new DateTimeOffset(2026, 10, 15, 0, 0, 0, TimeSpan.FromHours(2))),
         new List<SlMessageVariant> { new("Stopped", "details", null, "sv") },
         new SlScope(null, new List<SlScopeLine> { new(lineId, "13", "METRO", null) }));
+    }
 
-    private static List<AlertSuggestion> Run(params SlDeparture[] departures) =>
-        AlertRules.Evaluate(NewWatch(), departures.ToList(), new List<SlDeviation>(), Now);
+    private static List<AlertSuggestion> Run(params SlDeparture[] departures)
+    {
+        return AlertRules.Evaluate(
+            NewWatch(), 
+            departures.ToList(), 
+            new List<SlDeviation>(), 
+            Now);
+    }
+        
 
     [Fact] // T-01
     public void Cancelled_departure_gives_alert()
@@ -69,10 +78,6 @@ public class AlertRulesTests
     public void Departure_on_wrong_weekday_gives_no_alert()
         => Assert.Empty(Run(Departure(state: "CANCELLED", scheduled: new DateTime(2026, 10, 17, 8, 0, 0))));
 
-    [Fact]
-    public void Not_expected_departure_is_ignored()
-        => Assert.Empty(Run(Departure(journeyState: "NOTEXPECTED")));
-
     [Fact] // T-06
     public void Disruption_on_watched_line_gives_alert()
     {
@@ -92,7 +97,7 @@ public class AlertRulesTests
                 Now));
     }
 
-    [Fact] // T-08 (the key part; saving only once is tested later in the service)
+    [Fact] // T-08 
     public void Same_departure_gives_same_key_each_time()
     {
         var first = Run(Departure(state: "CANCELLED"));

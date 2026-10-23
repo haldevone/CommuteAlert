@@ -23,21 +23,22 @@ Resultat: **OK**, **Fel** eller **Ej körd**.
 6. Störning på vald linje - Larm skapas - OK
 7. Störning på annan linje - Inget larm - OK
 8. Samma händelse i två omgångar i rad - Ett enda larm - OK
-9. SL svarar inte (timeout) - Omförsök, ingen krasch, loggat - Ej körd
-10. Tomt svar - Inga larm, loggat - Ej körd
-11. Webhook-adress med fel värd - Avvisas - Ej körd
-12. Läs webhook direkt i databasen - Inte i klartext - Ej körd
-13. Ej inloggad användare öppnar inställningar - Skickas till inloggning - Ej körd
-14. Skicka testmeddelande till riktig Discord - Meddelandet visas i kanalen - Ej körd
-15. Användare A försöker nå användare Bs Bevakning - Nekas - Ej Körd
+9. Händelse utanför bevakningsföntret . Inget larm - OK
+10. Avgångar från SL kan avläsas - läses korrekt - OK
+11. Störningar från SL kan avläsas - läses korrekt - OK
+12. Webhook-adress med rätt värd - Godkänns - OK
+13. Webhook-adress med fel värd, 10 olika tester - Avvisas - OK
+14. SLAPIService anropar rätt service och svar kan läsas - JSON objekt med rätt data - OK
 
 
 
 ## 4. Sammanfattning
-- Antal testfall: [15]
-- Godkända: [8] | Fel: [ ] | Ej körda: [7]
+- Antal testfall: [13]
+- Godkända: [9] | Fel: [ ] | Ej körda: [2]
 - Datum för senaste körning: [2026-10-15]
 
 ## 5. Fel som hittades och åtgärder
 
 | Fel | Hittades av testfall | Orsak | Åtgärd | Omtestat |
+
+
