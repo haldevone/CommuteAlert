@@ -43,7 +43,10 @@
     Skapade SlsiteService som hämtar och cachar data från SL om hållplatser, samt sök funktioner. WatchesCOntroller, sökfunktion filtrering av bevakningar/hållplatser valbara alternativ, getCreate och Post Create bevakning samt Delete.
 
 - ## dag 5 vecka 2
-Ny Vy Index, Create och Search, Index listar skapade bevakningar som man kan ta bort med knapp för Sök, Sök listar sökta stationer som blir klickbara och väljer man de så kommer man till Create där man får skapa sin bevakning.
+    Ny Vy Index, Create och Search, Index listar skapade bevakningar som man kan ta bort med knapp för Sök, Sök listar sökta stationer som blir klickbara och väljer man de så kommer man till Create där man får skapa sin bevakning.
+
+- ## dag 6 vecka 2
+    Hämtning av hållplatserna hämtas separat vid 60s, fel vid enstaka hållplats loggas. AlertsController, listar de historiska utskick som skett
 
 
 ## Vecka 3 – 

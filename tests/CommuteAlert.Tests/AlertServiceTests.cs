@@ -5,6 +5,7 @@ using CommuteAlert.Web.Sl.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace CommuteAlert.Tests;
 

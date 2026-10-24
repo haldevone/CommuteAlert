@@ -4,6 +4,7 @@ using CommuteAlert.Web.Rules;
 using CommuteAlert.Web.Sl;
 using CommuteAlert.Web.Sl.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace CommuteAlert.Web.Services;
 
@@ -12,11 +13,13 @@ public class AlertService
 
     private readonly ApplicationDbContext _db;
     private readonly ISlApiService _sl;
+    private readonly ILogger<AlertService> _logger;
 
-    public AlertService(ApplicationDbContext db, ISlApiService sl)
+    public AlertService(ApplicationDbContext db, ISlApiService sl, ILogger<AlertService>? logger = null)
     {
         _db = db;
         _sl = sl;
+        _logger = logger;
     }
 
     //Hämtar SL-data och skapar nya alerts.
@@ -32,19 +35,45 @@ public class AlertService
 
         if (watches.Count == 0) return created;
 
-        var deviations = await _sl.GetDeviationsAsync(ct);
+        List<SlDeviation> deviations;
+
+        // Hämta avvikelser (deviations) från SL. Om det inte går, logga och fortsätt med tom lista.
+        try
+        {
+            deviations = await _sl.GetDeviationsAsync(ct);
+        }
+        catch (Exception ex) when (IsSlError(ex, ct))
+        {
+            _logger?.LogWarning("Could not fetch deviations: {Error}", ex.GetType().Name);
+            
+            deviations = new List<SlDeviation>();
+        }
 
         var departuresBySite = new Dictionary<int, List<SlDeparture>>();
 
-        // Hämta departures för varje unik siteId som finns i watches
+        // Hämta departures för varje unik siteId som finns i watches, och spara i en dictionary.
+        // Om det inte går att hämta departures för en site, logga och fortsätt med tom lista.
         foreach (var siteId in watches.Select(w => w.SiteId).Distinct())
-            departuresBySite[siteId] = await _sl.GetDeparturesAsync(siteId, ct);
+        {
+            try
+            {
+                departuresBySite[siteId] = await _sl.GetDeparturesAsync(siteId, ct);
+            }
+            catch (Exception ex) when (IsSlError(ex, ct))
+            {
+                _logger?.LogWarning("Could not fetch departures for site {SiteId}: {Error}",siteId, ex.GetType().Name);
+            }
+        }
 
-        // Utvärdera varje watch mot departures och deviations, och skapa alerts om det behövs, undvik dubbletter
+        // Utvärdera varje watch mot departures och deviations, och skapa alerts om det behövs,
+        // undvik dubbletter, spara i databasen och returnera listan med skapade alerts.
         foreach (var watch in watches)
         {
-            var suggestions = AlertRules.Evaluate(
-                watch, departuresBySite[watch.SiteId], deviations, nowLocal);
+            var departures = departuresBySite.TryGetValue(watch.SiteId, out var found)
+                ? found
+                : new List<SlDeparture>();
+
+            var suggestions = AlertRules.Evaluate(watch, departures, deviations, nowLocal);
 
             var sentKeys = (await _db.Alerts
                 .Where(a => a.WatchId == watch.Id)
@@ -72,5 +101,8 @@ public class AlertService
         return created;
     }
 
+    private static bool IsSlError(Exception ex, CancellationToken ct) =>
+    !ct.IsCancellationRequested &&
+    ex is HttpRequestException or TaskCanceledException or JsonException or NotSupportedException;
 
 }

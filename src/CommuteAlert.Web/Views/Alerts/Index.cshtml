@@ -1,0 +1,39 @@
+﻿@using CommuteAlert.Web.ViewModels
+@model List<AlertHistoryItem>
+@{
+    ViewData["Title"] = "History";
+}
+
+<h1>Alert history</h1>
+<p>The 50 latest alerts. "Not sent" means no webhook is saved or Discord could not be reached. The app stops retrying after 30 minutes.</p>
+
+@if (Model.Count == 0)
+{
+    <p>No alerts yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Station</th>
+                <th>Type</th>
+                <th>Message</th>
+                <th>Sent</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@a.SiteName</td>
+                    <td>@a.Type</td>
+                    <td>@a.Message</td>
+                    <td>@(a.Sent ? "Yes" : "Not sent")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

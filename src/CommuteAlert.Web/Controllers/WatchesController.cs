@@ -166,6 +166,17 @@ public class WatchesController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Toggle(int id)
+    {
+        var watch = await _db.Watches.SingleOrDefaultAsync(w => w.Id == id && w.UserId == GetUserId());
+        if (watch == null) return NotFound();
+
+        watch.IsActive = !watch.IsActive;
+        await _db.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
 
     //Skapar en valbara alternativ för en station
     private async Task<List<SelectListItem>> LoadTargetOptions(int siteId)
