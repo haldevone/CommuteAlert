@@ -18,7 +18,7 @@ public class WatchCreateViewModel
     public TimeOnly StartTime { get; set; } = new TimeOnly(7, 0);
     public TimeOnly EndTime { get; set; } = new TimeOnly(9, 0);
 
-    [Range(1, 120)]
+    [Range(1, 120, ErrorMessage = "Ange ett värde mellan 1 och 120.")]
     public int DelayThresholdMinutes { get; set; } = 5;
 
 }

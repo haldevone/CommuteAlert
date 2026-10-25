@@ -53,7 +53,7 @@ public class WatchesController : Controller
                 model.Results = await _sites.SearchSites(query);
             }catch (HttpRequestException)
             {
-                model.Error = "Could not reach SL. Try again later.";
+                model.Error = "Kunde inte nå SL. Försök igen senare.";
             }
         }
         return View(model);
@@ -84,7 +84,7 @@ public class WatchesController : Controller
         }
         catch (HttpRequestException)
         {
-            TempData["Message"] = "Could not reach SL. Try again later.";
+            TempData["Message"] = "Kunde inte nå SL. Försök igen senare.";
             return RedirectToAction(nameof(Search));
         }
     }
@@ -100,7 +100,7 @@ public class WatchesController : Controller
         }
         catch (HttpRequestException)
         {
-            TempData["Message"] = "Could not reach SL. Try again later.";
+            TempData["Message"] = "Kunde inte nå SL. Försök igen senare.";
             return RedirectToAction(nameof(Search));
         }
 
@@ -109,17 +109,17 @@ public class WatchesController : Controller
         model.SiteName = site.Name;
 
         if (await _db.Watches.CountAsync(w => w.UserId == GetUserId()) >= MaxWatchesPerUser)
-            ModelState.AddModelError("", $"You can have at most {MaxWatchesPerUser} watches.");
+            ModelState.AddModelError("", $"Du kan ha som mest {MaxWatchesPerUser} bevakningar.");
 
         if (!TryParseTarget(model.Target, out var mode, out var lineId, out var directionCode, out var label))
-            ModelState.AddModelError(nameof(model.Target), "Choose what to watch.");
+            ModelState.AddModelError(nameof(model.Target), "Välj vad du vill bevakas.");
 
         if (model.SelectedDays.Count == 0)
-            ModelState.AddModelError(nameof(model.SelectedDays), "Choose at least one day.");
+            ModelState.AddModelError(nameof(model.SelectedDays), "Välj minst en dag.");
 
         if (model.EndTime <= model.StartTime)
             ModelState.AddModelError(nameof(model.EndTime),
-                "End time must be after start time. Windows over midnight are not supported.");
+                "Sluttiden måste vara efter starttiden. Tidsfönster över midnatt stöds inte.");
 
 
         if (!ModelState.IsValid)
@@ -130,7 +130,7 @@ public class WatchesController : Controller
             }
             catch (HttpRequestException)
             {
-                TempData["Message"] = "Could not reach SL. Try again later.";
+                TempData["Message"] = "Kunde inte nå SL. Försök igen senare.";
                 return RedirectToAction(nameof(Search));
             }
             return View(model);
@@ -182,15 +182,15 @@ public class WatchesController : Controller
     private async Task<List<SelectListItem>> LoadTargetOptions(int siteId)
     {
         var departures = await _sl.GetDeparturesAsync(siteId);
-        var options = new List<SelectListItem> { new("Everything at this station", "all") };
+        var options = new List<SelectListItem> { new("Allt vid denna station", "all") };
 
         foreach (var mode in departures.Select(d => d.Line.TransportMode).Distinct().Order())
-            options.Add(new($"All {mode}", $"mode|{mode}"));
+            options.Add(new($"Alla {SlModeNames.Plural(mode)}", $"mode|{mode}"));
 
         foreach (var group in departures.GroupBy(d => (d.Line.Id, d.DirectionCode)))
         {
             var first = group.First();
-            var label = $"{first.Line.TransportMode} {first.Line.Designation} to {first.Destination}";
+            var label = $"{SlModeNames.Singular(first.Line.TransportMode)} {first.Line.Designation} till {first.Destination}";
             options.Add(new(label, $"line|{first.Line.Id}|{first.DirectionCode}|{label}"));
         }
 
@@ -204,7 +204,7 @@ public class WatchesController : Controller
         mode = null;
         lineId = null;
         directionCode = null;
-        label = "Everything at this station";
+        label = "Allt vid denna station";
 
         var parts = (target ?? "").Split('|');
         switch (parts[0])
@@ -216,7 +216,7 @@ public class WatchesController : Controller
                 && parts[1].Length is > 0 and <= 20
                 && parts[1].All(char.IsAsciiLetterUpper):
                 mode = parts[1];
-                label = $"All {mode}";
+                label = $"Alla {SlModeNames.Plural(mode)}";
                 return true;
 
             case "line" when parts.Length == 4

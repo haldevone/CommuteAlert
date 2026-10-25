@@ -48,6 +48,9 @@
 - ## dag 6 vecka 2
     Hämtning av hållplatserna hämtas separat vid 60s, fel vid enstaka hållplats loggas. AlertsController, listar de historiska utskick som skett
 
+- ## dag 7 vecka 2
+    Implementerade svenska och funktioner som översätter olika delan, har ändrat tillbaka till engelska. Jobbade med CSS och stylat om hela appen. La till en Home sektion som listar senaste 3 larmer samt antal sparade bevakningar.
+
 
 ## Vecka 3 – 
 

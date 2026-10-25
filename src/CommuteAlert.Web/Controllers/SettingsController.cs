@@ -83,7 +83,7 @@ public class SettingsController : Controller
         }
 
         var ok = await _notifier.SendAsync(_webhookProtector.Unprotect(webhook.EncryptedUrl),
-            "Test message from CommuteAlert");
+            "Testmeddelande från CommuteAlert");
         TempData["Message"] = ok ? "Test message sent." : "Could not send the test message.";
         return RedirectToAction(nameof(Index));
     }

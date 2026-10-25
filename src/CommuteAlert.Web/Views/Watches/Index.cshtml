@@ -1,4 +1,5 @@
-﻿@model List<CommuteAlert.Web.Models.Watch>
+﻿@using CommuteAlert.Web.Models
+@model List<Watch>
 @{
     ViewData["Title"] = "My watches";
 }
@@ -10,47 +11,35 @@
     <div class="alert alert-info">@message</div>
 }
 
-<p><a asp-action="Search" class="btn btn-primary">New watch</a></p>
+<a asp-action="Search" class="btn btn-primary ca-wide"><i class="bi bi-plus-lg"></i> New watch</a>
 
 @if (Model.Count == 0)
 {
-    <p>You have no watches yet.</p>
+    <div class="ca-card ca-empty">
+        <i class="bi bi-eye-slash"></i>
+        <p class="mb-0">You have no watches yet.<br />Add a station to start getting alerts.</p>
+    </div>
 }
-else
+
+@foreach (var w in Model)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Station</th>
-                <th>Watching</th>
-                <th>Days</th>
-                <th>Time</th>
-                <th>Delay limit</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var w in Model)
-            {
-                <tr>
-                    <td>@w.SiteName</td>
-                    <td>@w.TargetName</td>
-                    <td>@w.Days</td>
-                    <td>@w.StartTime.ToString("HH:mm") – @w.EndTime.ToString("HH:mm")</td>
-                    <td>@w.DelayThresholdMinutes min</td>
-                    <td>@(w.IsActive ? "Active" : "Paused")</td>
-                    <td class="text-nowrap">
-                        <form asp-action="Toggle" asp-route-id="@w.Id" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">@(w.IsActive ? "Pause" : "Resume")</button>
-                        </form>
-                        <form asp-action="Delete" asp-route-id="@w.Id" method="post" class="d-inline"
-                              onsubmit="return confirm('Delete this watch?');">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="ca-card @(w.IsActive ? "" : "ca-card-paused")">
+        <span class="ca-badge @(w.IsActive ? "ca-badge-green" : "ca-badge-grey")">@(w.IsActive ? "Active" : "Paused")</span>
+        <div class="ca-card-title">@w.SiteName</div>
+        <p class="ca-card-text">@w.TargetName</p>
+        <div class="ca-chips">
+            <span class="ca-chip"><i class="bi bi-calendar-week"></i> @w.Days</span>
+            <span class="ca-chip"><i class="bi bi-clock"></i> @w.StartTime.ToString("HH:mm")–@w.EndTime.ToString("HH:mm")</span>
+            <span class="ca-chip"><i class="bi bi-hourglass-split"></i> Delay ≥ @w.DelayThresholdMinutes min</span>
+        </div>
+        <div class="ca-actions">
+            <form asp-action="Toggle" asp-route-id="@w.Id" method="post">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">@(w.IsActive ? "Pause" : "Resume")</button>
+            </form>
+            <form asp-action="Delete" asp-route-id="@w.Id" method="post"
+                  onsubmit="return confirm('Delete this watch?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    </div>
 }
