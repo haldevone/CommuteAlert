@@ -13,8 +13,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+var adminEmail = builder.Configuration["Admin:Email"];
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("Admin", policy => policy.RequireAssertion(context =>
+    !string.IsNullOrEmpty(adminEmail) &&
+    string.Equals(context.User.Identity?.Name, adminEmail, StringComparison.OrdinalIgnoreCase)));
 
 builder.Services.AddControllersWithViews();
 
@@ -41,6 +48,26 @@ builder.Services.AddHttpClient<SlSiteService>(client =>
 
 var app = builder.Build();
 
+if (!EF.IsDesignTime)
+{
+    using var scope = app.Services.CreateScope();
+    await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.MigrateAsync();
+
+    var email = app.Configuration["Admin:Email"];
+    var password = app.Configuration["Admin:Password"];
+    var users = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+    if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password)
+        && await users.FindByEmailAsync(email) == null)
+    {
+        var admin = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+        var result = await users.CreateAsync(admin, password);
+        if (!result.Succeeded)
+            throw new InvalidOperationException("Could not create the admin user: " +
+                string.Join(", ", result.Errors.Select(e => e.Description)));
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -51,8 +78,21 @@ else
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseRouting();
+
+// Registration is closed: only the admin creates accounts
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/Identity/Account/Register", StringComparison.OrdinalIgnoreCase) ||
+        context.Request.Path.StartsWithSegments("/Identity/Account/RegisterConfirmation", StringComparison.OrdinalIgnoreCase))
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        return;
+    }
+    await next();
+});
 
 app.UseAuthorization();
 

@@ -8,7 +8,7 @@ Visa att systemet fungerar på en grundläggande nivå och hanterar fel och risk
 
 Enhetstester - Regelmotor och logik i Core, utan databas och nätverk
 Integrationstester - Flödet bevakning , larm sparat, mot testdatabas, hantering av fel och ogiltig data
-Manuella tester -  Riktiga SL och Discord, gränssnittet, simuleringsläge
+Manuella tester -  Riktiga SL och Discord, gränssnittet,
 
 
 ## 3. Testfall
@@ -33,12 +33,10 @@ Resultat: **OK**, **Fel** eller **Ej körd**.
 
 
 ## 4. Sammanfattning
-- Antal testfall: [13]
-- Godkända: [9] | Fel: [ ] | Ej körda: [2]
+- Antal testfall: [14]
+- Godkända: [14] | Fel: [ ] | Ej körda: [0]
 - Datum för senaste körning: [2026-10-15]
 
-## 5. Fel som hittades och åtgärder
 
-| Fel | Hittades av testfall | Orsak | Åtgärd | Omtestat |
 
 

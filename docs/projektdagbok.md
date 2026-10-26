@@ -28,7 +28,7 @@
 
 ## Vecka 2 – 
 
-**Veckans mål:** inloggning, bevakningar, regelmotor, dubblettskydd, Discord-notis, schemaläggning, enhetstester. Milstolpe: fungerande flöde från SL till Discord.
+**Veckans mål:** inloggning, bevakningar, regelmotor, dubblettskydd, Discord-notis, schemaläggning, enhetstester. 
 
 - ## dag 1 vecka 2
     Skapade AlertScheduler som automatiskt kör kontrollen (poolar varje minut) av SL och skickar alerts med jämna mellanrum.
@@ -54,9 +54,10 @@
 
 ## Vecka 3 – 
 
-**Veckans mål:** felhantering, krypterad webhook, loggning, simuleringsläge, systematiska tester.
+**Veckans mål:** felhantering, krypterad webhook, loggning, registrering av användare & säkerhet, azure deployment
 
-
+- ## dag 1 vecka 3
+    Byggde om att admin skapas vid början av applikationen. Admin ger tillgång till andra användare via privat användaruppgits invitation.
 
 ## Vecka 4 – 
 

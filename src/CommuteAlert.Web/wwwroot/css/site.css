@@ -417,3 +417,8 @@ a {
     list-style: none;
     padding: 0;
 }
+
+
+a[href*="/Identity/Account/Register"] {
+    display: none;
+}

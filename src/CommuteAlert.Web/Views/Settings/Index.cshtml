@@ -1,5 +1,7 @@
 ﻿@using CommuteAlert.Web.ViewModels
 @model WebhookViewModel
+@inject IAuthorizationService Authorization
+@using Microsoft.AspNetCore.Authorization
 @{
     ViewData["Title"] = "Settings";
 }
@@ -46,3 +48,16 @@
     <div class="ca-card-title">How to get a webhook</div>
     <p class="ca-card-text mb-0">In Discord, open your channel's settings, go to Integrations, then Webhooks, create a new webhook and copy its address.</p>
 </div>
+
+<div class="ca-card">
+    <div class="ca-card-title">Account</div>
+    <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword" class="btn btn-outline-primary mt-2">Change password</a>
+</div>
+
+@if ((await Authorization.AuthorizeAsync(User, "Admin")).Succeeded)
+{
+    <div class="ca-card">
+        <div class="ca-card-title">Admin</div>
+        <a asp-controller="Users" asp-action="Index" class="btn btn-outline-primary mt-2">Manage users</a>
+    </div>
+}

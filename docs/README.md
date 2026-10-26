@@ -41,7 +41,6 @@ dotnet run --project src/CommuteAlert.Web
 docker compose up
 
 
-## Simuleringsläge
 
 
 
