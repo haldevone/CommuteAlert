@@ -1,10 +1,12 @@
+using CommuteAlert.Web.Data;
+using CommuteAlert.Web.Notifications;
+using CommuteAlert.Web.Security;
+using CommuteAlert.Web.Services;
+using CommuteAlert.Web.Sl;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using CommuteAlert.Web.Data;
-using CommuteAlert.Web.Sl;
-using CommuteAlert.Web.Services;
-using CommuteAlert.Web.Security;
-using CommuteAlert.Web.Notifications;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,9 +43,27 @@ builder.Services.AddHttpClient<INotifier, DiscordNotifier>(client =>
 
 builder.Services.AddHostedService<AlertScheduler>();
 
+builder.Services.AddDataProtection()
+    .PersistKeysToDbContext<ApplicationDbContext>()
+    .SetApplicationName("CommuteAlert");
+
 builder.Services.AddMemoryCache();
+
 builder.Services.AddHttpClient<SlSiteService>(client =>
     client.Timeout = TimeSpan.FromSeconds(30));
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("login", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 8,
+                Window = TimeSpan.FromMinutes(1)
+            }));
+});
 
 
 var app = builder.Build();
@@ -80,6 +100,7 @@ else
 
 
 app.UseHttpsRedirection();
+app.UseRateLimiter();
 app.UseRouting();
 
 // Registration is closed: only the admin creates accounts
@@ -104,6 +125,7 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.MapRazorPages()
-   .WithStaticAssets();
+   .WithStaticAssets()
+   .RequireRateLimiting("login");
 
 app.Run();

@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CommuteAlert.Web.Models;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
 namespace CommuteAlert.Web.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options), IDataProtectionKeyContext
 {
 
     public DbSet<Watch> Watches
@@ -17,6 +18,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     }
     public DbSet<Alert> Alerts { get; set; }
     public DbSet<Webhook> Webhooks { get; set; }
+
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
