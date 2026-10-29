@@ -59,6 +59,9 @@
 - ## dag 1 vecka 3
     Byggde om att admin skapas vid början av applikationen. Admin ger tillgång till andra användare via privat användaruppgits invitation.
 
+- ## dag 2 vecka 3
+    Jobbade vidare med dokumentationen.
+
 ## Vecka 4 – 
 
 **Veckans mål:** README, Docker, GitHub Actions, testrapport, projektrapport, förberedelse inför redovisning.

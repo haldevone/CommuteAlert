@@ -75,6 +75,7 @@ public class AlertService
 
             var suggestions = AlertRules.Evaluate(watch, departures, deviations, nowLocal);
 
+            //Skapar en HashSet lista(lista med unika nycklar)
             var sentKeys = (await _db.Alerts
                 .Where(a => a.WatchId == watch.Id)
                 .Select(a => a.Key)
@@ -82,6 +83,7 @@ public class AlertService
 
             foreach (var s in suggestions)
             {
+                //Om nyckeln redan finns i databasen, hoppa över den. Annars lägg till den i HashSet och skapa en ny alert.
                 if (!sentKeys.Add(s.Key)) continue;
 
                 var alert = new Alert
