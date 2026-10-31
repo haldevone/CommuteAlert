@@ -1,0 +1,27 @@
+﻿@using CommuteAlert.Web.Models
+@using CommuteAlert.Web.ViewModels
+@model AlertHistoryItem
+@{
+    var (css, label) = Model.Type switch
+    {
+        AlertType.Cancelled => ("ca-badge-red", "Cancelled"),
+        AlertType.Delayed => ("ca-badge-amber", "Delayed"),
+        _ => ("ca-badge-blue", "Disruption")
+    };
+}
+<div class="ca-card">
+    <span class="ca-badge @css">@label</span>
+    <div class="ca-card-title">@Model.SiteName</div>
+    <p class="ca-card-text">@Model.Message</p>
+    <div class="ca-card-meta">
+        @Model.CreatedAt.ToString("MMM d, HH:mm") ·
+        @if (Model.Sent)
+        {
+            <span class="text-success"><i class="bi bi-check-circle"></i> Sent</span>
+        }
+        else
+        {
+            <span><i class="bi bi-dash-circle"></i> Not sent</span>
+        }
+    </div>
+</div>

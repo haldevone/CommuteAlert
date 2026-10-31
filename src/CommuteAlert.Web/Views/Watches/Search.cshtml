@@ -1,0 +1,33 @@
+﻿@using CommuteAlert.Web.ViewModels
+@model WatchSearchViewModel
+@{
+    ViewData["Title"] = "Find station";
+}
+
+<h1>Find a station</h1>
+
+@if (TempData["Message"] is string message)
+{
+    <div class="alert alert-info">@message</div>
+}
+
+<form asp-action="Search" method="get" class="mb-3">
+    <input name="query" value="@Model.Query" class="form-control mb-2" placeholder="Station name, e.g. Södertälje" />
+    <button type="submit" class="btn btn-primary ca-wide"><i class="bi bi-search"></i> Search</button>
+</form>
+
+@if (Model.Error != null)
+{
+    <div class="alert alert-warning">@Model.Error</div>
+}
+else if (Model.Query != null && Model.Results.Count == 0)
+{
+    <div class="ca-card ca-empty"><p class="mb-0">No stations found.</p></div>
+}
+
+@foreach (var site in Model.Results)
+{
+    <a class="ca-card ca-link-card" asp-action="Create" asp-route-siteId="@site.Id">
+        @site.Name <i class="bi bi-chevron-right"></i>
+    </a>
+}

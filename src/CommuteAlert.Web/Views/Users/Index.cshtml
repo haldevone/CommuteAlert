@@ -1,0 +1,47 @@
+﻿@using CommuteAlert.Web.ViewModels
+@model UsersViewModel
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h1>Users</h1>
+<p class="ca-muted">Registration is closed. Only Admin can create accounts.</p>
+
+@if (TempData["Message"] is string message)
+{
+    <div class="alert alert-info">@message</div>
+}
+
+<form asp-action="Create" method="post" class="ca-card">
+    <div class="ca-card-title">Add a user</div>
+    <div asp-validation-summary="All" class="text-danger mt-2"></div>
+    <div class="mb-3 mt-2">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" autocomplete="off" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Temporary password</label>
+        <input asp-for="Password" type="password" class="form-control" autocomplete="new-password" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create user</button>
+</form>
+
+<h2>Users</h2>
+
+@foreach (var u in Model.Users)
+{
+    <div class="ca-card">
+        <div class="ca-card-title">@u.Email</div>
+        @if (u.Id == Model.CurrentUserId)
+        {
+            <span class="ca-badge ca-badge-blue">You</span>
+        }
+        else
+        {
+            <form asp-action="Delete" asp-route-id="@u.Id" method="post" class="mt-2"
+                  onsubmit="return confirm('Delete this user and all their data?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+        }
+    </div>
+}

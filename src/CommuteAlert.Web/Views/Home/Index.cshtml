@@ -1,8 +1,91 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using CommuteAlert.Web.ViewModels
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (!Model.SignedIn)
+{
+    <section class="ca-hero">
+        <i class="bi bi-bell-fill"></i>
+        <h1>Never miss a delay</h1>
+        <p>CommuteAlert watches your SL stations and sends a message to your Discord when a departure is cancelled or late, or when a disruption hits your line.</p>
+        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary ca-wide">Log in</a>
+        <p class="mb-0 small">Access is by invitation only.</p>
+    </section>
+
+    <h2>How it works</h2>
+
+    <div class="ca-card">
+        <span class="ca-step-number">1</span>
+        <div class="ca-card-title">Pick a station</div>
+        <p class="ca-card-text mb-0">Search for any SL station and choose what to watch: everything, a type of transport, or one line and direction.</p>
+    </div>
+    <div class="ca-card">
+        <span class="ca-step-number">2</span>
+        <div class="ca-card-title">Set your days and times</div>
+        <p class="ca-card-text mb-0">Alerts are only sent on the days and hours you travel, and only when a delay is as long as you choose.</p>
+    </div>
+    <div class="ca-card">
+        <span class="ca-step-number">3</span>
+        <div class="ca-card-title">Get alerts in Discord</div>
+        <p class="ca-card-text mb-0">Connect your own Discord channel and get a push notification the moment something happens.</p>
+    </div>
+}
+else
+{
+    <h1>Welcome back</h1>
+
+    @if (!Model.HasWebhook)
+    {
+        <div class="ca-card ca-callout">
+            <i class="bi bi-discord"></i>
+            <div class="ca-card-title">Connect Discord</div>
+            <p class="ca-card-text">Alerts are sent to your own Discord channel. Add a webhook to start receiving them.</p>
+            <a asp-controller="Settings" asp-action="Index" class="btn btn-primary">Connect</a>
+        </div>
+    }
+
+    @if (Model.ActiveWatches + Model.PausedWatches == 0)
+    {
+        <div class="ca-card ca-callout">
+            <i class="bi bi-eye"></i>
+            <div class="ca-card-title">Create your first watch</div>
+            <p class="ca-card-text">Pick a station and the days and times you travel.</p>
+            <a asp-controller="Watches" asp-action="Search" class="btn btn-primary">New watch</a>
+        </div>
+    }
+    else
+    {
+        <div class="ca-stats">
+            <div class="ca-stat">
+                <div class="ca-stat-value">@Model.ActiveWatches</div>
+                <div class="ca-stat-label">Active watches</div>
+            </div>
+            <div class="ca-stat">
+                <div class="ca-stat-value">@Model.PausedWatches</div>
+                <div class="ca-stat-label">Paused</div>
+            </div>
+        </div>
+
+        <a asp-controller="Watches" asp-action="Search" class="btn btn-primary ca-wide"><i class="bi bi-plus-lg"></i> New watch</a>
+    }
+
+    <h2>Latest alerts</h2>
+
+    @if (Model.RecentAlerts.Count == 0)
+    {
+        <div class="ca-card ca-empty">
+            <i class="bi bi-bell-slash"></i>
+            <p class="mb-0">No alerts yet. They show up here when something happens on a watched route.</p>
+        </div>
+    }
+    else
+    {
+        foreach (var item in Model.RecentAlerts)
+        {
+            <partial name="_AlertCard" model="item" />
+        }
+        <a asp-controller="Alerts" asp-action="Index">See all alerts</a>
+    }
+}
